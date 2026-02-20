@@ -28,9 +28,15 @@ class SentenceSegmentation():
 			A list of strings where each string is a single sentence
 		"""
 
+		if not isinstance(text, str):
+			raise TypeError("Need String input")
+		
 		segmentedText = None
 
 		# Fill in code here
+		pattern = r'[\.\?\!]+'
+		result = re.split(pattern, text)
+		segmentedText = [sent for sent in result if sent is not None and len(sent)>0]
 
 		return segmentedText
 
