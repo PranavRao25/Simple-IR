@@ -1,11 +1,26 @@
 from util import *
 
 # Add your import statements here
-
-
+import re
+import json
 
 
 class StopwordRemoval():
+
+	def curated_list(self, text):
+		with open("stopwords.json", "r") as f:
+			stopwords = json.load(f)
+		stopwords = stopwords["stopwords"]
+
+		pattern = r"\b(" + r"|".join(stopwords) + r")\b"
+		stop_rem = re.compile(pattern)
+		cleaned_text = stop_rem.sub("", text)
+
+		return cleaned_text
+	
+	def data_driven(self, text):
+		
+
 
 	def fromList(self, text):
 		"""
