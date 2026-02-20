@@ -5,7 +5,7 @@ import re
 import nltk
 import spacy
 from nltk.tokenize import sent_tokenize
-
+from nltk.tokenize.punkt import PunktSentenceTokenizer, PunktParameters
 
 class SentenceSegmentation():
 
@@ -34,12 +34,11 @@ class SentenceSegmentation():
 		segmentedText = None
 
 		# Fill in code here
-		pattern = r'[\.\?\!]+'
+		pattern = r'[\.\?\!]+'  # BUG: Fix .gov, etc
 		result = re.split(pattern, text)
 		segmentedText = [sent for sent in result if sent is not None and len(sent)>0]
 
 		return segmentedText
-
 
 	def punkt(self, text):
 		"""
@@ -59,9 +58,16 @@ class SentenceSegmentation():
 		segmentedText = None
 
 		# Fill in code here
+		# TODO: Add more edge cases
+		salutations = ["Mr", "Mrs", "Dr", "Ms", "St", "Col", "Gov"]
+		websites = ["gov", "com", "org", "io", "edu"]
+		punkt_params = PunktParameters()
+		punkt_params.abbrev_types = set(salutations + websites)
+
+		segmentor = PunktSentenceTokenizer(punkt_params)
+		segmentedText = segmentor.tokenize(text)
 
 		return segmentedText
-
 
 	def spacySegmenter(self, text):
 		"""
@@ -81,5 +87,8 @@ class SentenceSegmentation():
 		segmentedText = None
 
 		# Fill in code here
+		nlp = spacy.load("en_core_web_sm")
+		doc = nlp(text)
+		segmentedText = list(doc.sents)
 
 		return segmentedText
