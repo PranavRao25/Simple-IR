@@ -17,7 +17,7 @@ sentences = [
     "This paper was written by Grover et al. and was published in 1992.",  # BREAK 4
     "You owe me $15.32 plus some biscuits."  # BREAK 5
     "And He said, \"What a wonderful world!\".", # BREAK 6
-    "", # BREAK 7
+    ".hack//SIGN is such a great show!", # BREAK 7
     "", # BREAK 8
     "", # BREAK 9
     "", # BREAK 10
@@ -36,7 +36,12 @@ outputs = [
     [],
     [],
     ["iitm.ac.in"],
-    ["Mrs. Hercules"]
+    ["Mrs. Hercules"],
+    ["What"],
+    ["This paper was written by Grover et al. and was published in 1992"],
+    ["You owe me $15.32 plus some biscuits"],
+    ["And He said, \"What a wonderful world!\""],
+    [".hack//SIGN is such a great show!"]
 ]
 
 def test_naive():
