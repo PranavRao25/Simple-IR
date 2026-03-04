@@ -35,7 +35,12 @@ class StopwordRemoval():
 		freq_table = defaultdict(int)
 		for doc in text:
 			for term in doc:
-				term = term.lower()
+				term = term.strip().lower()
+				if not term[0].isalpha():
+					term = term[1:]
+				if not term[-1].isalpha():
+					term = term[:-1]
+
 				freq_table[term] += 1
 		
 		# Normalize according to the highest frequency
