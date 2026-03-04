@@ -3,32 +3,11 @@ from util import *
 # Add your import statements here
 # (Students may import required libraries such as nltk, spacy, re, etc.)
 import nltk
-from nltk.tokenize import TreebankWordTokenizer
+from nltk.tokenize import TreebankWordTokenizer, RegexpTokenizer, word_tokenize, wordpunct_tokenize, WordPunctTokenizer
 import spacy
 from spacy.tokenizer import Tokenizer
 from spacy.lang.en import English
 import re
-
-"""
-from nltk.tokenize import word_tokenize
-
-# Same as TreeBankTokenizer
-text = "Hello everyone. Welcome to GeeksforGeeks."
-word_tokenize(text)
-"""
-"""
-from nltk.tokenize import WordPunctTokenizer
-
-tokenizer = WordPunctTokenizer()
-tokenizer.tokenize("Let's see how it's working.")  # includes punctuation
-"""
-"""
-from nltk.tokenize import RegexpTokenizer
-
-tokenizer = RegexpTokenizer(r'\W+')
-text = "Let's see how it's working."
-tokenizer.tokenize(text)
-"""
 
 """
 Types of Tokenization:
@@ -48,6 +27,10 @@ Dictionary based Tokenization
 Spacy Tokenizer
 Moses Tokenizer
 Unigram Language Model
+
+Difference between WordPunctTokenizer and TreeBankTokenizer:
+1. WordPunctTokenizer - splits I'm as I / ' / m
+2. TreeBankTokenizer - splits I'm as I / 'm
 """
 
 
@@ -55,8 +38,7 @@ class Tokenization():
 
 	def naive(self, text: list[str]) -> list[list[str]]:
 		"""
-		Tokenization using a Naive Approach
-
+		Word Level Tokenization using a Naive Approach
 
 		Parameters
 		----------
@@ -74,7 +56,8 @@ class Tokenization():
 
 		tokenizedText = None
 
-		# Fill in code here
+		tokenizer = WordPunctTokenizer() # uses regex expression : \w+|[^\w\s]+
+		tokenizedText = [tokenizer.tokenize(sent) for sent in text]  # includes punctuation
 
 		return tokenizedText
 
