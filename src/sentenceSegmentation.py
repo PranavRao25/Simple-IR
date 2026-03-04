@@ -1,4 +1,4 @@
-from util import *
+from src.util import *
 
 # Add your import statements here
 import re
@@ -13,7 +13,7 @@ class SentenceSegmentation():
 		# Load spaCy model (students may use this if needed)
 		self.nlp = spacy.load("en_core_web_sm")
 
-	def naive(self, text):
+	def naive(self, text: str)-> list[str]:
 		"""
 		Sentence Segmentation using a Naive Approach
 
@@ -40,7 +40,7 @@ class SentenceSegmentation():
 
 		return segmentedText
 
-	def punkt(self, text):
+	def punkt(self, text: str)-> list[str]:
 		"""
 		Sentence Segmentation using the Punkt Tokenizer
 
@@ -54,10 +54,10 @@ class SentenceSegmentation():
 		list
 			A list of strings where each string is a single sentence
 		"""
+		
+		if not isinstance(text, str):
+			raise TypeError("Need String input")
 
-		segmentedText = None
-
-		# Fill in code here
 		# TODO: Add more edge cases
 		salutations = ["Mr", "Mrs", "Dr", "Ms", "St", "Col", "Gov"]
 		websites = ["gov", "com", "org", "io", "edu"]
@@ -69,7 +69,7 @@ class SentenceSegmentation():
 
 		return segmentedText
 
-	def spacySegmenter(self, text):
+	def spacySegmenter(self, text: str)-> list[str]:
 		"""
 		Sentence Segmentation using spaCy
 
@@ -89,6 +89,6 @@ class SentenceSegmentation():
 		# Fill in code here
 		nlp = spacy.load("en_core_web_sm")
 		doc = nlp(text)
-		segmentedText = list(doc.sents)
+		segmentedText = list(str(doc.sents))
 
 		return segmentedText

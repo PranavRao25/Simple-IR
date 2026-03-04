@@ -11,6 +11,16 @@ with open(parent / "config.yaml", "r") as f:
     configs = yaml.full_load(f)
 
 def docs_loader():
+    """
+        Docs is a list of dictionary of keys:
+        1. id
+        2. author
+        3. bibliography
+        4. body
+        5. title
+    It has 1400 entries
+    """
+
     path = configs["dataset"]["docs"]
 
     with open(path, "r") as f:
@@ -19,6 +29,14 @@ def docs_loader():
     return docs
 
 def queries_loader():
+    """
+        Queries is a list of dictionary of keys:
+        1. query number
+        2. query
+
+        It has 225 entries
+    """
+
     path = configs["dataset"]["queries"]
 
     with open(path, "r") as f:
@@ -34,44 +52,44 @@ def qrels_loader():
     
     return qrels
 
-def external_sentence_segmentor(text):
-    """
-        https://www.kaggle.com/discussions/general/331411
-    """
+# def external_sentence_segmentor(text):
+#     """
+#         https://www.kaggle.com/discussions/general/331411
+#     """
 
-    alphabets= "([A-Za-z])"
-    prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
-    suffixes = "(Inc|Ltd|Jr|Sr|Co|al)"
-    starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
-    acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
-    websites = "[.](com|net|org|io|gov)"
-    digits = "([0-9])"
+#     alphabets= "([A-Za-z])"
+#     prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
+#     suffixes = "(Inc|Ltd|Jr|Sr|Co|al)"
+#     starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
+#     acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
+#     websites = "[.](com|net|org|io|gov)"
+#     digits = "([0-9])"
 
-    def split_into_sentences(text):
-        text = " " + text + "  "
-        text = text.replace("\n"," ")
-        text = re.sub(prefixes,"\\1<prd>",text)
-        text = re.sub(websites,"<prd>\\1",text)
-        if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
-        text = re.sub("\s" + alphabets + "[.] "," \\1<prd> ",text)
-        text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
-        text = re.sub(alphabets + "[.]" + alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
-        text = re.sub(alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>",text)
-        text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
-        text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
-        text = re.sub(" " + alphabets + "[.]"," \\1<prd>",text)
-        text = re.sub(digits + "[.]" + digits,"\\1<prd>\\2",text)
-        if "”" in text: text = text.replace(".”","”.")
-        if "\"" in text: text = text.replace(".\"","\".")
-        if "!" in text: text = text.replace("!\"","\"!")
-        if "?" in text: text = text.replace("?\"","\"?")
-        text = text.replace(".",".<stop>")
-        text = text.replace("?","?<stop>")
-        text = text.replace("!","!<stop>")
-        text = text.replace("<prd>",".")
-        sentences = text.split("<stop>")
-        sentences = sentences[:-1]
-        sentences = [s.strip() for s in sentences]
-        return sentences
+#     def split_into_sentences(text):
+#         text = " " + text + "  "
+#         text = text.replace("\n"," ")
+#         text = re.sub(prefixes,"\\1<prd>",text)
+#         text = re.sub(websites,"<prd>\\1",text)
+#         if "Ph.D" in text: text = text.replace("Ph.D.","Ph<prd>D<prd>")
+#         text = re.sub("\s" + alphabets + "[.] "," \\1<prd> ",text)
+#         text = re.sub(acronyms+" "+starters,"\\1<stop> \\2",text)
+#         text = re.sub(alphabets + "[.]" + alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>\\3<prd>",text)
+#         text = re.sub(alphabets + "[.]" + alphabets + "[.]","\\1<prd>\\2<prd>",text)
+#         text = re.sub(" "+suffixes+"[.] "+starters," \\1<stop> \\2",text)
+#         text = re.sub(" "+suffixes+"[.]"," \\1<prd>",text)
+#         text = re.sub(" " + alphabets + "[.]"," \\1<prd>",text)
+#         text = re.sub(digits + "[.]" + digits,"\\1<prd>\\2",text)
+#         if "”" in text: text = text.replace(".”","”.")
+#         if "\"" in text: text = text.replace(".\"","\".")
+#         if "!" in text: text = text.replace("!\"","\"!")
+#         if "?" in text: text = text.replace("?\"","\"?")
+#         text = text.replace(".",".<stop>")
+#         text = text.replace("?","?<stop>")
+#         text = text.replace("!","!<stop>")
+#         text = text.replace("<prd>",".")
+#         sentences = text.split("<stop>")
+#         sentences = sentences[:-1]
+#         sentences = [s.strip() for s in sentences]
+#         return sentences
 
-    return split_into_sentences(text)
+#     return split_into_sentences(text)

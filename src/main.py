@@ -1,7 +1,7 @@
-from sentenceSegmentation import SentenceSegmentation
-from tokenization import Tokenization
-from inflectionReduction import InflectionReduction
-from stopwordRemoval import StopwordRemoval
+from src.sentenceSegmentation import SentenceSegmentation
+from src.tokenization import Tokenization
+from src.inflectionReduction import InflectionReduction
+from src.stopwordRemoval import StopwordRemoval
 
 import argparse
 import json
