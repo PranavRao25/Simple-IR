@@ -96,8 +96,7 @@ class InflectionReduction:
 		# Lemmatization is complex, slow but good performance
 
 		# Heuristically decide on the length of text
-
-		if len(text) < 20:
+		if len(text) > 20:
 			reducedText = self.porterStemmer(text)
 		else:
 			reducedText = self.wordnetLemmatizer(text)
