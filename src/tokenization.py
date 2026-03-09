@@ -98,8 +98,6 @@ class Tokenization():
 
 		nlp = spacy.load('en_core_web_sm')
 		
-		# tokenizer = Tokenizer(nlp.vocab)
-
 		# Fill in code here
 		tokenizedText = []
 		for string in text:

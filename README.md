@@ -1,4 +1,8 @@
 # Simple-IR
+
+- Name: Pranav Rao
+- Roll No: DA25M022
+
 To build foundational components of a search engine, such as Sentence segmentation, Tokenization, etc and perform theoretical analysis
 
 ## Sentence Segmentation

@@ -53,15 +53,16 @@ class InflectionReduction:
 			lemmatized tokens representing a sentence
 		"""
 
-		"""
-			JJ : Adjective
-			NN : Noun
-			VB: Verb
-			R: Adverb
-			PRP: 
-		"""
-
 		def get_wordnet_tag(tag):
+			"""
+				Specific POS tags of Wordnet
+				JJ : Adjective
+				NN : Noun
+				VB: Verb
+				R: Adverb
+				PRP: 
+			"""
+			
 			if tag.startswith("JJ"):
 				return 'a'
 			elif tag.startswith("N"):

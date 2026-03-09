@@ -64,26 +64,17 @@ class StopwordRemoval():
 		for term in freq_table.keys():
 			softmax_table[term] = freq_table[term] / sum(freq_table.values())
 		
-		all_stopwords = []
 		l = len(softmax_table.keys())
 		if l > 0:
-			threshold = 0.15
-			if l != len(softmax_table.values()):
-				print(l, len(softmax_table.values()))
-			
+			threshold = 0.15  # 15% of the total types in this text
+
+			# get a subset of the total terms with the highest occurence probability as stopwords
 			threshold_probab = sorted(list(softmax_table.values()), reverse=True)[int(threshold * l)]
 			stopwords = [entry[0] for entry in softmax_table.items() if entry[-1] >= threshold_probab]
-			all_stopwords.append(stopwords)
 			# remove words
 			stopwordRemovedText = [[term for term in doc if term not in stopwords] for doc in text]
 		else:
 			stopwordRemovedText = text
-
-		with open("stopwords.json", "r") as f:
-			k = json.load(f)
-		k = k + all_stopwords
-		with open("stopwords.json", "w") as f:
-			json.dump(k, f)
 
 		return stopwordRemovedText
 

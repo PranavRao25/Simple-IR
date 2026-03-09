@@ -34,6 +34,7 @@ class SentenceSegmentation():
 		segmentedText = None
 
 		# Fill in code here
+		# Breaks based on . / ? / !
 		pattern = r'[\.\?\!]+'  # BUG: Fix .gov, etc
 		result = re.split(pattern, text)
 		segmentedText = [sent for sent in result if sent is not None and len(sent)>0]
@@ -58,11 +59,12 @@ class SentenceSegmentation():
 		if not isinstance(text, str):
 			raise TypeError("Need String input")
 
+		# add some edge cases to consider while segmenting
 		# TODO: Add more edge cases
 		salutations = ["Mr", "Mrs", "Dr", "Ms", "St", "Col", "Gov"]
 		websites = ["gov", "com", "org", "io", "edu"]
 		punkt_params = PunktParameters()
-		punkt_params.abbrev_types = set(salutations + websites)
+		punkt_params.abbrev_types = set(salutations + websites)  # these are abbreviations not to be split
 
 		segmentor = PunktSentenceTokenizer(punkt_params)
 		segmentedText = segmentor.tokenize(text)
