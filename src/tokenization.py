@@ -1,14 +1,43 @@
-from util import *
+from src.util import *
 
 # Add your import statements here
 # (Students may import required libraries such as nltk, spacy, re, etc.)
+import nltk
+from nltk.tokenize import TreebankWordTokenizer, WordPunctTokenizer
+import spacy
+from spacy.tokenizer import Tokenizer
+import re
+
+"""
+Types of Tokenization:
+1. Word tokenization -
+	a. Punctuation-based tokenization
+	b. Space-based tokenization
+	c. Rule-based tokenization
+2. Character tokenization
+3. Sentence Tokenization
+4. Subword Tokenization -
+	a. SentencePiece
+	b. Unigram
+	c. WordPiece
+	d. Byte-Pair Encoding (BPE)
+
+Dictionary based Tokenization
+Spacy Tokenizer
+Moses Tokenizer
+Unigram Language Model
+
+Difference between WordPunctTokenizer and TreeBankTokenizer:
+1. WordPunctTokenizer - splits I'm as I / ' / m
+2. TreeBankTokenizer - splits I'm as I / 'm
+"""
 
 
 class Tokenization():
 
-	def naive(self, text):
+	def naive(self, text: list[str]) -> list[list[str]]:
 		"""
-		Tokenization using a Naive Approach
+		Word Level Tokenization using a Naive Approach
 
 		Parameters
 		----------
@@ -21,15 +50,18 @@ class Tokenization():
 			A list of lists where each sub-list is a sequence of tokens
 		"""
 
+		# Tokenize each sentence
+		# Word Tokenization / Sub-word tokenization / N-gram tokenization
+
 		tokenizedText = None
 
-		# Fill in code here
+		tokenizer = WordPunctTokenizer() # uses regex expression : \w+|[^\w\s]+
+
+		tokenizedText = [tokenizer.tokenize(sent) for sent in text]  # includes punctuation
 
 		return tokenizedText
 
-
-
-	def pennTreeBank(self, text):
+	def pennTreeBank(self, text: list[str]) -> list[list[str]]:
 		"""
 		Tokenization using the Penn Tree Bank Tokenizer
 
@@ -44,15 +76,12 @@ class Tokenization():
 			A list of lists where each sub-list is a sequence of tokens
 		"""
 
-		tokenizedText = None
-
-		# Fill in code here
+		tokenizer = TreebankWordTokenizer()
+		tokenizedText = [tokenizer.tokenize(string) for string in text]  # includes punctuation
 
 		return tokenizedText
-
-
-
-	def spacyTokenizer(self, text):
+	
+	def spacyTokenizer(self, text) -> list[list[str]]:
 		"""
 		Tokenization using spaCy
 
@@ -67,8 +96,15 @@ class Tokenization():
 			A list of lists where each sub-list is a sequence of tokens
 		"""
 
-		tokenizedText = None
+		nlp = spacy.load('en_core_web_sm')
+		
+		# tokenizer = Tokenizer(nlp.vocab)
 
 		# Fill in code here
+		tokenizedText = []
+		for string in text:
+			doc = nlp(string)
+			l = [str(token) for token in doc]
+			tokenizedText.append(l)
 
 		return tokenizedText

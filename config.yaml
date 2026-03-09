@@ -1,0 +1,10 @@
+project: "Simple-IR"
+version: v1
+author: "Pranav Rao"
+
+dataset:
+  docs: "cranfield/cran_docs.json"
+  queries: "cranfield/cran_queries.json"
+  qrels: "cranfield/cran_qrels.json"
+
+output: "output"

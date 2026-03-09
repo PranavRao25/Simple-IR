@@ -1,7 +1,7 @@
-from sentenceSegmentation import SentenceSegmentation
-from tokenization import Tokenization
-from inflectionReduction import InflectionReduction
-from stopwordRemoval import StopwordRemoval
+from src.sentenceSegmentation import SentenceSegmentation
+from src.tokenization import Tokenization
+from src.inflectionReduction import InflectionReduction
+from src.stopwordRemoval import StopwordRemoval
 
 import argparse
 import json
@@ -14,7 +14,7 @@ if version_info.major == 3:
     pass
 elif version_info.major == 2:
     try:
-        input = raw_input
+        input = raw_input # type: ignore
     except NameError:
         pass
 else:
@@ -155,6 +155,7 @@ class SearchEngine:
 
 if __name__ == "__main__":
 
+	# python3 src/main.py 
 	parser = argparse.ArgumentParser(description='main.py')
 
 	parser.add_argument('-dataset', default="cranfield",
@@ -163,7 +164,7 @@ if __name__ == "__main__":
 	parser.add_argument('-out_folder', default="output",
 						help="Path to output folder")
 
-	parser.add_argument('-segmenter', default="punkt",
+	parser.add_argument('-segmenter', default="punkt",  # punkt
 	                    help="Sentence Segmenter Type [naive|punkt]")
 
 	parser.add_argument('-tokenizer', default="ptb",
