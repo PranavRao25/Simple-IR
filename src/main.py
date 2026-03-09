@@ -163,7 +163,7 @@ if __name__ == "__main__":
 	parser.add_argument('-out_folder', default="output",
 						help="Path to output folder")
 
-	parser.add_argument('-segmenter', default="naive",  # punkt
+	parser.add_argument('-segmenter', default="punkt",  # punkt
 	                    help="Sentence Segmenter Type [naive|punkt]")
 
 	parser.add_argument('-tokenizer', default="ptb",
