@@ -1,7 +1,7 @@
-from sentenceSegmentation import SentenceSegmentation
-from tokenization import Tokenization
-from inflectionReduction import InflectionReduction
-from stopwordRemoval import StopwordRemoval
+from src.sentenceSegmentation import SentenceSegmentation
+from src.tokenization import Tokenization
+from src.inflectionReduction import InflectionReduction
+from src.stopwordRemoval import StopwordRemoval
 
 import argparse
 import json
@@ -14,7 +14,7 @@ if version_info.major == 3:
     pass
 elif version_info.major == 2:
     try:
-        input = raw_input
+        input = raw_input # type: ignore
     except NameError:
         pass
 else:
@@ -163,7 +163,7 @@ if __name__ == "__main__":
 	parser.add_argument('-out_folder', default="output",
 						help="Path to output folder")
 
-	parser.add_argument('-segmenter', default="punkt",
+	parser.add_argument('-segmenter', default="naive",  # punkt
 	                    help="Sentence Segmenter Type [naive|punkt]")
 
 	parser.add_argument('-tokenizer', default="ptb",
