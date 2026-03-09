@@ -14,7 +14,7 @@ if version_info.major == 3:
     pass
 elif version_info.major == 2:
     try:
-        input = raw_input
+        input = raw_input # type: ignore
     except NameError:
         pass
 else:
@@ -155,6 +155,7 @@ class SearchEngine:
 
 if __name__ == "__main__":
 
+	# python3 src/main.py 
 	parser = argparse.ArgumentParser(description='main.py')
 
 	parser.add_argument('-dataset', default="cranfield",
