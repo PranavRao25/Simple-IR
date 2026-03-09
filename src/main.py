@@ -14,7 +14,7 @@ if version_info.major == 3:
     pass
 elif version_info.major == 2:
     try:
-        input = raw_input
+        input = raw_input # type: ignore
     except NameError:
         pass
 else:

@@ -89,6 +89,6 @@ class SentenceSegmentation():
 		# Fill in code here
 		nlp = spacy.load("en_core_web_sm")
 		doc = nlp(text)
-		segmentedText = list(str(doc.sents))
+		segmentedText = list([str(sent) for sent in doc.sents])
 
 		return segmentedText
