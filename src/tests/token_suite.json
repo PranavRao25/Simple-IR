@@ -1,0 +1,34 @@
+[
+    {
+        "text": ["(is that even possible?)"],
+        "expected": [["(", "is", "that", "even", "possible", "?", ")"]]
+    },
+    {
+        "text": ["nlp_student@iitm.ac.in"],
+        "expected": [["nlp_student@iitm.ac.in"]]
+    },
+    {
+        "text": ["I'm"],
+        "expected": [["I", "'m"]]
+    },
+    {
+        "text": ["3.14"],
+        "expected": [["3.14"]]
+    },
+    {
+        "text": ["Good muffins cost $3.88 (roughly 3,36 euros)\n in New York.", "Please buy me \n two of them.", "\nThanks."],
+        "expected": [["Good", "muffins", "cost", "$", "3.88", "(", "roughly", "3,36", "euros", ")", "\n", "in", "New", "York", "."] , ["Please", "buy", "me", "\n", "two", "of", "them", "."] , ["\n", "Thanks", "."]]
+    },
+    {
+        "text": ["The meeting is at 14:30 12-03-2025"],
+        "expected": [["The", "meeting", "is", "at", "14:30", "12-03-2025"]]
+    },
+    {
+        "text": ["1999/2000"],
+        "expected": [["1999", "/", "2000"]]
+    },
+    {
+        "text": ["The model achieved 95%accuracy.Furthermore, it..."],
+        "expected": [["The", "model", "achieved", "95", "%", "accuracy", ".", "Furthermore", "it", "..."]]
+    }
+]

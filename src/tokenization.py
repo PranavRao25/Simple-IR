@@ -1,12 +1,11 @@
-from util import *
+from src.util import *
 
 # Add your import statements here
 # (Students may import required libraries such as nltk, spacy, re, etc.)
 import nltk
-from nltk.tokenize import TreebankWordTokenizer, RegexpTokenizer, word_tokenize, wordpunct_tokenize, WordPunctTokenizer
+from nltk.tokenize import TreebankWordTokenizer, WordPunctTokenizer
 import spacy
 from spacy.tokenizer import Tokenizer
-from spacy.lang.en import English
 import re
 
 """
@@ -57,6 +56,7 @@ class Tokenization():
 		tokenizedText = None
 
 		tokenizer = WordPunctTokenizer() # uses regex expression : \w+|[^\w\s]+
+
 		tokenizedText = [tokenizer.tokenize(sent) for sent in text]  # includes punctuation
 
 		return tokenizedText
@@ -75,8 +75,6 @@ class Tokenization():
 		list
 			A list of lists where each sub-list is a sequence of tokens
 		"""
-
-		
 
 		tokenizer = TreebankWordTokenizer()
 		tokenizedText = [tokenizer.tokenize(string) for string in text]  # includes punctuation
@@ -98,10 +96,15 @@ class Tokenization():
 			A list of lists where each sub-list is a sequence of tokens
 		"""
 
-		nlp = English()
-		tokenizer = Tokenizer(nlp.vocab)
+		nlp = spacy.load('en_core_web_sm')
+		
+		# tokenizer = Tokenizer(nlp.vocab)
 
 		# Fill in code here
-		tokenizedText = [tokenizer(string) for string in text]
+		tokenizedText = []
+		for string in text:
+			doc = nlp(string)
+			l = [str(token) for token in doc]
+			tokenizedText.append(l)
 
 		return tokenizedText
