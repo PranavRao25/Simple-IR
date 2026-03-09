@@ -155,6 +155,7 @@ class SearchEngine:
 
 if __name__ == "__main__":
 
+	# python3 src/main.py 
 	parser = argparse.ArgumentParser(description='main.py')
 
 	parser.add_argument('-dataset', default="cranfield",
