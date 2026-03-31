@@ -2,12 +2,12 @@ from src.sentenceSegmentation import SentenceSegmentation
 from src.tokenization import Tokenization
 from src.inflectionReduction import InflectionReduction
 from src.stopwordRemoval import StopwordRemoval
-
+from src.evaluation import Evaluation
+from src.informationRetrieval import InformationRetrieval
 import argparse
 import json
 import os
 from sys import version_info
-
 
 # Input compatibility for Python 2 and Python 3
 if version_info.major == 3:
@@ -23,161 +23,191 @@ else:
 
 class SearchEngine:
 
-	def __init__(self, args):
-		self.args = args
-		self.tokenizer = Tokenization()
-		self.sentenceSegmenter = SentenceSegmentation()
-		self.inflectionReducer = InflectionReduction()
-		self.stopwordRemover = StopwordRemoval()
+    def __init__(self, args):
+        self.args = args
 
-		# Create output folder if not exists
-		if not os.path.exists(self.args.out_folder):
-			os.makedirs(self.args.out_folder)
+        if not os.path.exists(self.args.out_folder):
+            os.makedirs(self.args.out_folder)
 
-	def segmentSentences(self, text):
-		if self.args.segmenter == "naive":
-			return self.sentenceSegmenter.naive(text)
-		elif self.args.segmenter == "punkt":
-			return self.sentenceSegmenter.punkt(text)
+        self.tokenizer = Tokenization()
+        self.sentenceSegmenter = SentenceSegmentation()
+        self.inflectionReducer = InflectionReduction()
+        self.stopwordRemover = StopwordRemoval()
 
-	def tokenize(self, text):
-		if self.args.tokenizer == "naive":
-			return self.tokenizer.naive(text)
-		elif self.args.tokenizer == "ptb":
-			return self.tokenizer.pennTreeBank(text)
+        self.informationRetriever = InformationRetrieval()
+        self.evaluator = Evaluation()
 
-	def reduceInflection(self, text):
-		return self.inflectionReducer.reduce(text)
+    def segmentSentences(self, text):
+        if self.args.segmenter == "naive":
+            return self.sentenceSegmenter.naive(text)
+        elif self.args.segmenter == "punkt":
+            return self.sentenceSegmenter.punkt(text)
 
-	def removeStopwords(self, text):
-		return self.stopwordRemover.fromList(text)
+    def tokenize(self, text):
+        if self.args.tokenizer == "naive":
+            return self.tokenizer.naive(text)
+        elif self.args.tokenizer == "ptb":
+            return self.tokenizer.pennTreeBank(text)
 
+    def reduceInflection(self, text):
+        return self.inflectionReducer.reduce(text)
 
-	def preprocessQueries(self, queries):
+    def removeStopwords(self, text):
+        return self.stopwordRemover.fromList(text)
 
-		segmentedQueries = []
-		for query in queries:
-			segmentedQueries.append(self.segmentSentences(query))
+    def preprocessQueries(self, queries):
+        segmentedQueries = []
+        for query in queries:
+            segmentedQuery = self.segmentSentences(query)
+            segmentedQueries.append(segmentedQuery)
 
-		with open(os.path.join(self.args.out_folder, "segmented_queries.txt"), 'w') as f:
-			json.dump(segmentedQueries, f)
+        json.dump(segmentedQueries, open(os.path.join(self.args.out_folder, "segmented_queries.txt"), 'w'))
 
-		tokenizedQueries = []
-		for query in segmentedQueries:
-			tokenizedQueries.append(self.tokenize(query))
+        tokenizedQueries = []
+        for query in segmentedQueries:
+            tokenizedQuery = self.tokenize(query)
+            tokenizedQueries.append(tokenizedQuery)
 
-		with open(os.path.join(self.args.out_folder, "tokenized_queries.txt"), 'w') as f:
-			json.dump(tokenizedQueries, f)
+        json.dump(tokenizedQueries, open(os.path.join(self.args.out_folder, "tokenized_queries.txt"), 'w'))
 
-		reducedQueries = []
-		for query in tokenizedQueries:
-			reducedQueries.append(self.reduceInflection(query))
+        reducedQueries = []
+        for query in tokenizedQueries:
+            reducedQuery = self.reduceInflection(query)
+            reducedQueries.append(reducedQuery)
 
-		with open(os.path.join(self.args.out_folder, "reduced_queries.txt"), 'w') as f:
-			json.dump(reducedQueries, f)
+        json.dump(reducedQueries, open(os.path.join(self.args.out_folder, "reduced_queries.txt"), 'w'))
 
-		stopwordRemovedQueries = []
-		for query in reducedQueries:
-			stopwordRemovedQueries.append(self.removeStopwords(query))
+        stopwordRemovedQueries = []
+        for query in reducedQueries:
+            stopwordRemovedQuery = self.removeStopwords(query)
+            stopwordRemovedQueries.append(stopwordRemovedQuery)
 
-		with open(os.path.join(self.args.out_folder, "stopword_removed_queries.txt"), 'w') as f:
-			json.dump(stopwordRemovedQueries, f)
+        json.dump(stopwordRemovedQueries, open(os.path.join(self.args.out_folder, "stopword_removed_queries.txt"), 'w'))
 
-		return stopwordRemovedQueries
+        return stopwordRemovedQueries
 
+    def preprocessDocs(self, docs):
+        segmentedDocs = []
+        for doc in docs:
+            segmentedDoc = self.segmentSentences(doc)
+            segmentedDocs.append(segmentedDoc)
 
-	def preprocessDocs(self, docs):
+        json.dump(segmentedDocs, open(os.path.join(self.args.out_folder, "segmented_docs.txt"), 'w'))
 
-		segmentedDocs = []
-		for doc in docs:
-			segmentedDocs.append(self.segmentSentences(doc))
+        tokenizedDocs = []
+        for doc in segmentedDocs:
+            tokenizedDoc = self.tokenize(doc)
+            tokenizedDocs.append(tokenizedDoc)
 
-		with open(os.path.join(self.args.out_folder, "segmented_docs.txt"), 'w') as f:
-			json.dump(segmentedDocs, f)
+        json.dump(tokenizedDocs, open(os.path.join(self.args.out_folder, "tokenized_docs.txt"), 'w'))
 
-		tokenizedDocs = []
-		for doc in segmentedDocs:
-			tokenizedDocs.append(self.tokenize(doc))
+        reducedDocs = []
+        for doc in tokenizedDocs:
+            reducedDoc = self.reduceInflection(doc)
+            reducedDocs.append(reducedDoc)
 
-		with open(os.path.join(self.args.out_folder, "tokenized_docs.txt"), 'w') as f:
-			json.dump(tokenizedDocs, f)
+        json.dump(reducedDocs, open(os.path.join(self.args.out_folder, "reduced_docs.txt"), 'w'))
 
-		reducedDocs = []
-		for doc in tokenizedDocs:
-			reducedDocs.append(self.reduceInflection(doc))
+        stopwordRemovedDocs = []
+        for doc in reducedDocs:
+            stopwordRemovedDoc = self.removeStopwords(doc)
+            stopwordRemovedDocs.append(stopwordRemovedDoc)
 
-		with open(os.path.join(self.args.out_folder, "reduced_docs.txt"), 'w') as f:
-			json.dump(reducedDocs, f)
+        json.dump(stopwordRemovedDocs, open(os.path.join(self.args.out_folder, "stopword_removed_docs.txt"), 'w'))
 
-		stopwordRemovedDocs = []
-		for doc in reducedDocs:
-			stopwordRemovedDocs.append(self.removeStopwords(doc))
+        return stopwordRemovedDocs
 
-		with open(os.path.join(self.args.out_folder, "stopword_removed_docs.txt"), 'w') as f:
-			json.dump(stopwordRemovedDocs, f)
+    def evaluateDataset(self):
+        queries_json = json.load(open(os.path.join(args.dataset, "cran_queries.json"), 'r'))[:]
+        query_ids = [item["query number"] for item in queries_json]
+        queries = [item["query"] for item in queries_json]
 
-		return stopwordRemovedDocs
+        processedQueries = self.preprocessQueries(queries)
 
+        docs_json = json.load(open(os.path.join(args.dataset, "cran_docs.json"), 'r'))[:]
+        doc_ids = [item["id"] for item in docs_json]
+        docs = [item["body"] for item in docs_json]
 
-	def evaluateDataset(self):
+        processedDocs = self.preprocessDocs(docs)
 
-		query_path = os.path.join(self.args.dataset, "cran_queries.json")
-		doc_path = os.path.join(self.args.dataset, "cran_docs.json")
+        self.informationRetriever.buildIndex(processedDocs, doc_ids)
+        doc_IDs_ordered = self.informationRetriever.rank(processedQueries)
 
-		with open(query_path, 'r') as f:
-			queries_json = json.load(f)
+        qrels = json.load(open(os.path.join(args.dataset, "cran_qrels.json"), 'r'))[:]
 
-		queries = [item["query"] for item in queries_json]
-		self.preprocessQueries(queries)
+        precisions, recalls, fscores, MAPs, nDCGs, MRRs = [], [], [], [], [], []
 
-		with open(doc_path, 'r') as f:
-			docs_json = json.load(f)
+        for k in range(1, 11):
 
-		docs = [item["body"] for item in docs_json]
-		self.preprocessDocs(docs)
+            precision = self.evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k)
+            recall = self.evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k)
+            fscore = self.evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k)
 
+            precisions.append(precision)
+            recalls.append(recall)
+            fscores.append(fscore)
 
-	def handleCustomQuery(self):
+            print(f"Precision, Recall, F-score @ {k}: {precision}, {recall}, {fscore}")
 
-		print("Enter query below")
-		query = input()
+            MAP = self.evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k)
+            nDCG = self.evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k)
+            MRR = self.evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k)
 
-		self.preprocessQueries([query])
+            MAPs.append(MAP)
+            nDCGs.append(nDCG)
+            MRRs.append(MRR)
 
-		doc_path = os.path.join(self.args.dataset, "cran_docs.json")
+            print(f"MAP, nDCG, MRR @ {k}: {MAP}, {nDCG}, {MRR}")
 
-		with open(doc_path, 'r') as f:
-			docs_json = json.load(f)
+        # Plot
+        plt.plot(range(1, 11), precisions, label="Precision")
+        plt.plot(range(1, 11), recalls, label="Recall")
+        plt.plot(range(1, 11), fscores, label="F-Score")
+        plt.plot(range(1, 11), MAPs, label="MAP")
+        plt.plot(range(1, 11), nDCGs, label="nDCG")
+        plt.plot(range(1, 11), MRRs, label="MRR")
 
-		docs = [item["body"] for item in docs_json]
-		self.preprocessDocs(docs)
+        plt.legend()
+        plt.title("Evaluation Metrics - Cranfield Dataset")
+        plt.xlabel("k")
+        plt.savefig(os.path.join(args.out_folder, "eval_plot.png"))
+
+    def handleCustomQuery(self):
+
+        print("Enter query below")
+        query = input()
+
+        processedQuery = self.preprocessQueries([query])[0]
+
+        docs_json = json.load(open(os.path.join(args.dataset, "cran_docs.json"), 'r'))[:]
+        doc_ids = [item["id"] for item in docs_json]
+        docs = [item["body"] for item in docs_json]
+
+        processedDocs = self.preprocessDocs(docs)
+
+        self.informationRetriever.buildIndex(processedDocs, doc_ids)
+        doc_IDs_ordered = self.informationRetriever.rank([processedQuery])[0]
+
+        print("\nTop five document IDs : ")
+        for id_ in doc_IDs_ordered[:5]:
+            print(id_)
 
 
 if __name__ == "__main__":
 
-	# python3 src/main.py 
-	parser = argparse.ArgumentParser(description='main.py')
+    parser = argparse.ArgumentParser(description='main.py')
 
-	parser.add_argument('-dataset', default="cranfield",
-						help="Path to dataset folder")
+    parser.add_argument('-dataset', default="cranfield/")
+    parser.add_argument('-out_folder', default="output/")
+    parser.add_argument('-segmenter', default="punkt")
+    parser.add_argument('-tokenizer', default="ptb")
+    parser.add_argument('-custom', action="store_true")
 
-	parser.add_argument('-out_folder', default="output",
-						help="Path to output folder")
+    args = parser.parse_args()
 
-	parser.add_argument('-segmenter', default="punkt",  # punkt
-	                    help="Sentence Segmenter Type [naive|punkt]")
+    searchEngine = SearchEngine(args)
 
-	parser.add_argument('-tokenizer', default="ptb",
-	                    help="Tokenizer Type [naive|ptb]")
-
-	parser.add_argument('-custom', action="store_true",
-						help="Take custom query as input")
-
-	args = parser.parse_args()
-
-	searchEngine = SearchEngine(args)
-
-	if args.custom:
-		searchEngine.handleCustomQuery()
-	else:
-		searchEngine.evaluateDataset()
+    if args.custom:
+        searchEngine.handleCustomQuery()
+    else:
+        searchEngine.evaluateDataset()
