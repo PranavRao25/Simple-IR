@@ -6,6 +6,7 @@ from src.evaluation import Evaluation
 from src.informationRetrieval import InformationRetrieval
 import argparse
 import json
+import matplotlib.pyplot as plt
 import os
 from sys import version_info
 
