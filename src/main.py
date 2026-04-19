@@ -1,9 +1,9 @@
-from src.sentenceSegmentation import SentenceSegmentation
-from src.tokenization import Tokenization
-from src.inflectionReduction import InflectionReduction
-from src.stopwordRemoval import StopwordRemoval
-from src.evaluation import Evaluation
-from src.informationRetrieval import InformationRetrieval
+from sentenceSegmentation import SentenceSegmentation
+from tokenization import Tokenization
+from inflectionReduction import InflectionReduction
+from stopwordRemoval import StopwordRemoval
+from evaluation import Evaluation
+from informationRetrieval import InformationRetrieval
 import argparse
 import json
 import matplotlib.pyplot as plt
@@ -23,7 +23,6 @@ else:
 
 
 class SearchEngine:
-
     def __init__(self, args):
         self.args = args
 
@@ -136,10 +135,16 @@ class SearchEngine:
 
         qrels = json.load(open(os.path.join(args.dataset, "cran_qrels.json"), 'r'))[:]
 
+        # # print(doc_IDs_ordered[0])
+        # print(len(doc_IDs_ordered))
+        # print(set(len(i) for i in doc_IDs_ordered))
+
+        # ASSUMING doc_IDs_ordered IS ORDERED IN INCREASING ORDER OF THE QUERIES
+
         precisions, recalls, fscores, MAPs, nDCGs, MRRs = [], [], [], [], [], []
 
         for k in range(1, 11):
-
+            # print(k)
             precision = self.evaluator.meanPrecision(doc_IDs_ordered, query_ids, qrels, k)
             recall = self.evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k)
             fscore = self.evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k)
@@ -149,18 +154,22 @@ class SearchEngine:
             fscores.append(fscore)
 
             print(f"Precision, Recall, F-score @ {k}: {precision}, {recall}, {fscore}")
+            # print(f"Precision @ {k}: {precision}")
+            # break
 
             MAP = self.evaluator.meanAveragePrecision(doc_IDs_ordered, query_ids, qrels, k)
-            nDCG = self.evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k)
-            MRR = self.evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k)
+            nDCG = self.evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k)  # INPUT doc_IDs_ordered is issue
+            MRR = self.evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k)  # INPUT doc_IDs_ordered is issue
 
             MAPs.append(MAP)
             nDCGs.append(nDCG)
             MRRs.append(MRR)
 
             print(f"MAP, nDCG, MRR @ {k}: {MAP}, {nDCG}, {MRR}")
+            # print(f"MRR @ {k}: {MRR}")
+            # break
 
-        # Plot
+        # # Plot
         plt.plot(range(1, 11), precisions, label="Precision")
         plt.plot(range(1, 11), recalls, label="Recall")
         plt.plot(range(1, 11), fscores, label="F-Score")
@@ -208,7 +217,9 @@ if __name__ == "__main__":
 
     searchEngine = SearchEngine(args)
 
-    if args.custom:
-        searchEngine.handleCustomQuery()
-    else:
-        searchEngine.evaluateDataset()
+    # if args.custom:
+    #     searchEngine.handleCustomQuery()
+    # else:
+    #     searchEngine.evaluateDataset()
+
+    searchEngine.evaluateDataset()
