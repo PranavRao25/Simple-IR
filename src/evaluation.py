@@ -36,9 +36,6 @@ class Evaluation():
 		precision = -1
 		total_k = query_doc_IDs_ordered[:k]
 		no_relevant = len(set(true_doc_IDs).intersection(set(total_k)))
-
-		# print(total_k[0] in true_doc_IDs)
-		# print(total_k, true_doc_IDs)
 		precision = no_relevant / k
 
 		return precision

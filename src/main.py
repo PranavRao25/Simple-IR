@@ -6,6 +6,7 @@ from evaluation import Evaluation
 from informationRetrieval import InformationRetrieval
 import argparse
 import json
+import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from sys import version_info
@@ -149,9 +150,9 @@ class SearchEngine:
             recall = self.evaluator.meanRecall(doc_IDs_ordered, query_ids, qrels, k)
             fscore = self.evaluator.meanFscore(doc_IDs_ordered, query_ids, qrels, k)
 
-            precisions.append(precision)
-            recalls.append(recall)
-            fscores.append(fscore)
+            precisions.append(round(precision, 4))
+            recalls.append(round(recall, 4))
+            fscores.append(round(fscore, 4))
 
             print(f"Precision, Recall, F-score @ {k}: {precision}, {recall}, {fscore}")
             # print(f"Precision @ {k}: {precision}")
@@ -161,13 +162,27 @@ class SearchEngine:
             nDCG = self.evaluator.meanNDCG(doc_IDs_ordered, query_ids, qrels, k)  # INPUT doc_IDs_ordered is issue
             MRR = self.evaluator.meanReciprocalRank(doc_IDs_ordered, query_ids, qrels, k)  # INPUT doc_IDs_ordered is issue
 
-            MAPs.append(MAP)
-            nDCGs.append(nDCG)
-            MRRs.append(MRR)
+            MAPs.append(round(MAP, 4))
+            nDCGs.append(round(nDCG, 4))
+            MRRs.append(round(MRR, 4))
 
             print(f"MAP, nDCG, MRR @ {k}: {MAP}, {nDCG}, {MRR}")
             # print(f"MRR @ {k}: {MRR}")
             # break
+
+        results = {
+            "precisions": precisions,
+            "recalls": recalls,
+            "fscores": fscores,
+            "MAPs": MAPs,
+            "nDCGs": nDCGs,
+            "MRRs": MRRs
+        }
+        df = pd.DataFrame(results)
+        # with open(os.path.join(args.out_folder, "metrics.json"), "w") as f:
+        #     json.dump(results, f)
+
+        df.to_csv(os.path.join(args.out_folder, "metrics.csv"), index=False)
 
         # # Plot
         plt.plot(range(1, 11), precisions, label="Precision")

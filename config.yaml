@@ -6,5 +6,30 @@ dataset:
   docs: "cranfield/cran_docs.json"
   queries: "cranfield/cran_queries.json"
   qrels: "cranfield/cran_qrels.json"
+  contrastive:
+    queries:
+      negative: "cranfield/constrastive/queries_negative.json"
+      positive: "cranfield/constrastive/queries_positive.json"
+    docs:
+      negative: "cranfield/constrastive/docs_negative.json"
+      positive: "cranfield/constrastive/docs_positive.json"
+  triplet:
+    docs: "cranfield/triplet/docs_triplet.parquet"
+    queries: "cranfield/triplet/queries_triplet.parquet"
+    split: "cranfield/triplet"
+  infonce: "cranfield/infonce/queries_mnrl.parquet"
+  hard_infonce: "cranfield/hard_infonce/queries_mnrl_hard.parquet"
+  mnrl: "cranfield/mnrl/cranfield_infonce_triplets.parquet"
+
+model:
+  name: "sentence-transformers/all-MiniLM-L6-v2"
+  hyperparams:
+    epochs: 1
+    lr: 2e-5
+    wgt_decay: 0.01
+    batch_size: 32
+    gradient_accumulation_steps: 1
+    warmup_ratio: 0.1
+  path: "model/mnrl"
 
 output: "output"

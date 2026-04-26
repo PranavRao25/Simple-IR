@@ -1,0 +1,35 @@
+[
+    {
+        "name": "sentence-transformers/paraphrase-albert-small-v2",
+        "hyperparams":{
+        "lr": 1e-4,
+        "weight_decay": 0.01,
+        "batch_size": 32,
+        "gradient_accumulation_steps": 2,
+        "warmup_ratio": 0.1,
+        "epoch": 1},
+        "size": "43MB"
+    },
+    {
+        "name": "sentence-transformers/all-MiniLM-L6-v2",
+        "hyperparams":{
+            "lr": 2e-5,
+            "weight_decay": 0.01,
+            "batch_size": 32,
+            "gradient_accumulation_steps": 1,
+            "warmup_ratio": 0.1,
+            "epoch": 1},
+        "size": "80MB"
+    },
+    {
+        "name": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+        "hyperparams":{
+            "lr": 1e-4,
+            "weight_decay": 0.01,
+            "batch_size": 32,
+            "gradient_accumulation_steps": 2,
+            "warmup_ratio": 0.1,
+            "epoch": 1},
+        "size": "61MB"
+    }
+]
