@@ -1,0 +1,12 @@
+{
+	"valid": {
+		"infonce": 1.01856,
+		"hard_infonce": 0.29789,
+		"mnrl": 1.63988
+	},
+	"test": {
+		"infonce": 0.999,
+		"hard_infonce": 0.999,
+		"mnrl": 0.81793
+	}
+}
